@@ -26,6 +26,7 @@ public class kirklandCampusServer {
 		   	     	     
 		   	 	 while(true)
 		   	 			{ byte[] receiveData = new byte[1024];
+				   	 	  byte[] sendData;
 				   	 	  String[] parts;
 		   	 		      DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		   	 			  serverSocket.receive(receivePacket);

@@ -26,7 +26,8 @@ public class WestmountCampusServer {
 		         DatagramSocket serverSocket = new DatagramSocket(9877);
 		   	     while(true)
 		   	 			{ byte[] receiveData = new byte[1024];
-				   	 	  String[] parts;
+		   	 			  byte[] sendData;
+		   	 			  String[] parts;
 				   	 	  DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		   	 			  serverSocket.receive(receivePacket);
 		   	 			  String sReceivedData = new String( receivePacket.getData());
