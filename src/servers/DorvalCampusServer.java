@@ -1,3 +1,5 @@
+package servers;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -8,7 +10,7 @@ import java.rmi.registry.Registry;
 //@author Binay
 public class DorvalCampusServer {
 
-	public static void main(String str[])
+	public static void main(String[] str)
 	{  String registryURL,sStatus="Action couldn't carried out",sStudentId,timeslot,date,sServer;
 	   Integer roomNumber;
 	
@@ -23,7 +25,6 @@ public class DorvalCampusServer {
 		     DatagramSocket serverSocket = new DatagramSocket(9878);
 		   	 while(true)
 		   	 	{ byte[] receiveData = new byte[1024];
-			   	  byte[] sendData = new byte[1024];
 			   	  String[] parts;
 		   		  DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		   	 	  serverSocket.receive(receivePacket);

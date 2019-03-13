@@ -1,3 +1,5 @@
+package servers;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -6,59 +8,59 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 //@author Binay
-public class WestmountCampusServer {
+public class kirklandCampusServer {
 
-	public static void main(String str[])
+	public static void main(String[] str)
 	{  String registryURL,sStatus="Action couldn't carried out",sStudentId,date,timeslot,sServer;
 	   Integer roomNumber;
-    
+	    
 		try{
-			    startRegistry(1099);
-			    WestmountServerImpl exportedObj = new WestmountServerImpl();
+			     startRegistry(1099);
+			     KirklandServerImpl exportedObj = new KirklandServerImpl();
 			    
-		         registryURL = "Westmount";
+		         registryURL = "Kirkland";
 		         Naming.rebind(registryURL, exportedObj);
-		       
-		         System.out.println("Westmount Server ready.");
-		         
-		         DatagramSocket serverSocket = new DatagramSocket(9877);
-		   	     while(true)
+		         System.out.println("Kirkland Server ready.");
+
+		         DatagramSocket serverSocket = new DatagramSocket(9876);
+		   	     	     
+		   	 	 while(true)
 		   	 			{ byte[] receiveData = new byte[1024];
-				   	 	  byte[] sendData = new byte[1024];
 				   	 	  String[] parts;
-				   	 	  DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+		   	 		      DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		   	 			  serverSocket.receive(receivePacket);
 		   	 			  String sReceivedData = new String( receivePacket.getData());
-		   	 			if (sReceivedData.contains("/"))
-		   	 			  { parts = sReceivedData.split("/");
+		   	 			
+		   	 			  if (sReceivedData.contains("/"))
+		   	 			  {parts = sReceivedData.split("/");
 		   	 			    sStudentId = parts[0];
 		   	 		        roomNumber = Integer.parseInt(parts[1]);
 		   	 	            date = parts[2];
 		   	 	            timeslot =parts[3].trim();
-		   	 	        sStatus = exportedObj.bookRoom(sStudentId,"Westmount",roomNumber,date,timeslot);
-		   	 			  }
-		   	    		else if (sReceivedData.contains(":"))
-			   	  	    { parts = sReceivedData.split(":");
-			   	 		  sServer = parts[0];
-			   	 		  date = parts[1].trim();
-			   	 		  sStatus=exportedObj.getAvailableTimeSlot(sServer, date);
-			   	 	   } 
-		   	    		else if (sReceivedData.contains("]"))
- 	 			          {  parts = sReceivedData.split("]");
-	 			             sStudentId = parts[0];
-	 			             String sBookingId = parts[1].trim();
-	 			             sStatus = exportedObj.cancelBooking(sStudentId,sBookingId);  
-	 			          }
-		   	 			
+		   	 	            sStatus = exportedObj.bookRoom(sStudentId,"Kirkland",roomNumber,date,timeslot);
+		   	 			   }
+		   	    	 	   else if (sReceivedData.contains(":"))
+				   	 	   { parts = sReceivedData.split(":");
+				   	 		 sServer = parts[0];
+				   	 		 date = parts[1].trim();
+				   	 		 sStatus=exportedObj.getAvailableTimeSlot(sServer, date);
+				   	 	   } 
+  	 			          else if (sReceivedData.contains("]"))
+   	 			          {  parts = sReceivedData.split("]");
+  	 			             sStudentId = parts[0];
+  	 			             String sBookingId = parts[1].trim();
+  	 			             sStatus = exportedObj.cancelBooking(sStudentId,sBookingId);  
+  	 			          }  
+		   	 		  
 		   	 	          InetAddress IPAddress = receivePacket.getAddress();
 		   	 			  int port = receivePacket.getPort();
 		   	 			  sendData = sStatus.getBytes();
 		   	 			  DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, port);
 		   	 			  serverSocket.send(sendPacket);
-		   	 			}   
-		         
+		   	 			} 
+		         	         
 		}catch(Exception e)
-		    {System.out.println("Exception"+e);
+		    {System.out.println("Exception: "+e);
 		    }
 	}
 
@@ -71,8 +73,8 @@ public class WestmountCampusServer {
      }
      catch (RemoteException e) { 
         // No valid registry at that port.
-    System.out.println("RMI registry cannot be located at port "+ RMIPortNum);
-    Registry registry = LocateRegistry.createRegistry(RMIPortNum);
+     System.out.println("RMI registry cannot be located at port "+ RMIPortNum);
+     Registry registry = LocateRegistry.createRegistry(RMIPortNum);
      System.out.println("RMI registry created at port " + RMIPortNum);
      }
   } // end startRegistry

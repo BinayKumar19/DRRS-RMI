@@ -1,3 +1,5 @@
+import servers.CampusServerInterface;
+
 import java.io.*;
 import java.rmi.*;
 import java.text.DateFormat;
@@ -6,7 +8,7 @@ import java.util.Date;
 // @author Binay
 public class AdminClient {
 
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 	      	 
 	         String sAdminId, sChoice,sStatus=null,registryURL = null, sDate = null;
 	         int nNoTimeSlots;
@@ -26,7 +28,7 @@ public class AdminClient {
 	         
 	         FileWriter file = new FileWriter("./Logs/AdminClient_"+sAdminId+".txt",true); 
 	         output = new BufferedWriter(file);
-	         output.append("Admin ID:"+sAdminId+System.lineSeparator());
+	         output.append("Admin ID:" + sAdminId+System.lineSeparator());
 	       
 	         if (sAdminId.length()!=8)
 	           sStatus="Invalid Admin ID";

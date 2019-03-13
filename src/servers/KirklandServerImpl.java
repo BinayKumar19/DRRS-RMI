@@ -1,3 +1,5 @@
+package servers;
+
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -8,7 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+
 //@author Binay
 public class KirklandServerImpl extends UnicastRemoteObject
                  implements CampusServerInterface{

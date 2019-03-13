@@ -1,3 +1,5 @@
+import servers.CampusServerInterface;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -8,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 //@author Binay
 public class StudentClient {
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 	      
 	         InputStreamReader is = new InputStreamReader(System.in);
 	         BufferedReader br = new BufferedReader(is);

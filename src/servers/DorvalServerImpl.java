@@ -1,3 +1,5 @@
+package servers;
+
 import java.io.*;
 import java.net.*;
 import java.rmi.RemoteException;
@@ -6,7 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+
 //@author Binay
 public class DorvalServerImpl extends UnicastRemoteObject
                  implements CampusServerInterface{

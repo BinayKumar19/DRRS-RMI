@@ -1,3 +1,7 @@
+package servers;
+
+import servers.CampusServerInterface;
+
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -8,10 +12,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+
 //@author Binay
 public class WestmountServerImpl extends UnicastRemoteObject
-                 implements CampusServerInterface{
+                 implements CampusServerInterface {
 
 	//Contains Date as key and hRoom as value
 	static HashMap<String, HashMap<Integer, HashMap<String, String>>> hDate = 
