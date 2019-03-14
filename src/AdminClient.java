@@ -42,7 +42,7 @@ public class AdminClient {
 
     public static void main(String[] args) {
 
-        String adminId, status = null, registryURL = null;
+        String adminId, status;
         AdminClient client = new AdminClient();
 
         adminId = client.readLine("Please enter your Admin ID");
@@ -58,13 +58,15 @@ public class AdminClient {
     }
 
     private String performOperation(String adminId) {
-        String operationChoice, status = null, registryURL = null, sDate = null;
-        int nNoTimeSlots;
-        Integer iRoomNo;
-        String[] sTimeSlots = new String[30];
+        String operationChoice, status = null, registryURL = null, date = null;
+        int noTimeSlots;
+        Integer roomNo;
+        String[] timeSlotsArray = new String[30];
+
+        String serverName = getServerName(adminId);
 
         // find the remote object and cast it to an interface object
-        CampusServerInterface serverObj = getRMIObject(adminId);
+        CampusServerInterface serverObj = getRMIObject(serverName);
         if (serverObj == null) {
             return "Registory Error";
         }
@@ -74,18 +76,18 @@ public class AdminClient {
         System.out.println("2-to delete the room");
         operationChoice = readLine();
 
-        iRoomNo = Integer.parseInt(readLine("Please Enter Room Number:"));
-        sDate = readLine("Please Enter Date(DD-MON-YYYY Format):");
-        nNoTimeSlots = Integer.parseInt(readLine("How many Time slot do you want to enter?"));
+        roomNo = Integer.parseInt(readLine("Please Enter Room Number:"));
+        date = readLine("Please Enter Date(DD-MON-YYYY Format):");
+        noTimeSlots = Integer.parseInt(readLine("How many Time slot do you want to enter?"));
 
         lw.writeToLog("Server:" + registryURL + System.lineSeparator());
-        lw.writeToLog("Date:" + sDate + System.lineSeparator());
-        lw.writeToLog("Room:" + iRoomNo + System.lineSeparator());
+        lw.writeToLog("Date:" + date + System.lineSeparator());
+        lw.writeToLog("Room:" + roomNo + System.lineSeparator());
 
         System.out.println("Please Enter Time Slot(HH:MM-HH:MM format):");
-        for (int i = 0; i < nNoTimeSlots; i++) {
-            sTimeSlots[i] = readLine(i + ": ");
-            lw.writeToLog("TimeSlot:" + sTimeSlots[i] + System.lineSeparator());
+        for (int i = 0; i < noTimeSlots; i++) {
+            timeSlotsArray[i] = readLine(i + ": ");
+            lw.writeToLog("TimeSlot:" + timeSlotsArray[i] + System.lineSeparator());
         }
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -94,34 +96,33 @@ public class AdminClient {
         if (operationChoice.equals("1"))  //To Create the Room
         {
             lw.writeToLog(dateFormat.format(d1) + " Create Room" + System.lineSeparator());
-            status = createRoom(serverObj, iRoomNo, sDate, nNoTimeSlots, sTimeSlots);
+            status = createRoom(serverObj, roomNo, date, noTimeSlots, timeSlotsArray);
         } else if (operationChoice.equals("2")) //To Delete the Room
         {
             lw.writeToLog(dateFormat.format(d1) + " Delete Room" + System.lineSeparator());
-            status = deleteRoom(serverObj, iRoomNo, sDate, sTimeSlots);
+            status = deleteRoom(serverObj, roomNo, date, timeSlotsArray);
         }
 
         return status;
     }
 
-    private String createRoom(CampusServerInterface serverObj, int iRoomNo, String sDate, int nNoTimeSlots, String[] sTimeSlots) {
+    private String createRoom(CampusServerInterface serverObj, int roomNo, String date, int noTimeSlots, String[] timeSlots) {
         String status = null;
 
         // invoke the remote methods
         try {
-            status = serverObj.createRoom(iRoomNo, sDate, nNoTimeSlots, sTimeSlots);
+            status = serverObj.createRoom(roomNo, date, noTimeSlots, timeSlots);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
         return status;
     }
 
-    private String deleteRoom(CampusServerInterface serverObj, int iRoomNo, String sDate, String[] sTimeSlots) {
-        System.out.println();
+    private String deleteRoom(CampusServerInterface serverObj, int roomNo, String date, String[] timeSlots) {
         String status = null;
 
         try {
-            status = serverObj.deleteRoom(iRoomNo, sDate, sTimeSlots);
+            status = serverObj.deleteRoom(roomNo, date, timeSlots);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -129,13 +130,11 @@ public class AdminClient {
         return status;
     }
 
-    private CampusServerInterface getRMIObject(String adminId) {
+    private CampusServerInterface getRMIObject(String serverName) {
         CampusServerInterface serverObj = null;
-        String registryURL = getRegistryURL(adminId);
-
         // find the remote object and cast it to an interface object
         try {
-            serverObj = (CampusServerInterface) Naming.lookup(registryURL);
+            serverObj = (CampusServerInterface) Naming.lookup(serverName);
         } catch (NotBoundException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
@@ -147,10 +146,10 @@ public class AdminClient {
         return serverObj;
     }
 
-    private String getRegistryURL(String adminId) {
+    private String getServerName(String adminId) {
         String adminIdPart1 = adminId.substring(0, 4);
         String issue;
-        String registryURL = null;
+        String serverName = null;
 
         if (adminId.length() != 8) {
             issue = "Admin Id should have a length 8";
@@ -169,17 +168,17 @@ public class AdminClient {
 
         //Dorval-Campus (DVL), Kirkland-Campus (KKL) and Westmount-Campus (WST)
         if (adminIdPart1.equals("DVLA"))
-            registryURL = "Dorval";
+            serverName = "Dorval";
         else if (adminIdPart1.equals("KKLA"))
-            registryURL = "Kirkland";
+            serverName = "Kirkland";
         else if (adminIdPart1.equals("WSTA"))
-            registryURL = "Westmount";
+            serverName = "Westmount";
         else {
             issue = "Admin Id Incorrect";
             logError(issue);
             return null;
         }
-        return registryURL;
+        return serverName;
     }
 
     private void logError(String issue) {
