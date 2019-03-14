@@ -2,22 +2,21 @@ package servers;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-//@author Binay
+
 public interface CampusServerInterface extends Remote {
 
-	String createRoom (Integer room_Number, String date, int nNoTimeSlots, String[] list_Of_Time_Slots)
+	String createRoom (Integer roomNumber, String date, int noTimeSlots, String[] timeSlotsList)
                         throws RemoteException;
 	
-	String deleteRoom (Integer room_Number, String date, String[] List_Of_Time_Slots)
+	String deleteRoom (Integer roomNumber, String date, String[] timeSlotsList)
                         throws RemoteException;
 	
-	String bookRoom (String sStudentId, String campusName,Integer roomNumber,String date,String timeslot)
+	String bookRoom (String studentId, String campusName, Integer roomNumber, String date, String timeSlot)
                         throws RemoteException;
     
-	String getAvailableTimeSlot(String sServer, String date)
+	String getAvailableTimeSlot(String server, String date)
     					throws RemoteException;
 
-	String cancelBooking(String sStudentId, String sBookingID)
+	String cancelBooking(String studentId, String bookingID)
 						throws RemoteException;
-
 }
